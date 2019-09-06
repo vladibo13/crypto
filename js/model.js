@@ -5,3 +5,12 @@ class CoinList {
 		this.name = name;
 	}
 }
+
+class CoinInfo {
+	constructor(image, usdCoinPrice, eurCoinPrice, ilsCoinPrice) {
+		this.image = image;
+		this.usdCoinPrice = usdCoinPrice;
+		this.eurCoinPrice = eurCoinPrice;
+		this.ilsCoinPrice = ilsCoinPrice;
+	}
+}

@@ -8,6 +8,12 @@ const api = {
 			url: `https://api.coingecko.com/api/v3/coins/list?‬‬`,
 			method: 'get'
 		});
+	},
+	getBitCoinInfo: (coinID) => {
+		return $.ajax({
+			url: `https://api.coingecko.com/api/v3/coins/${coinID}?`,
+			method: 'get'
+		});
 	}
 };
 

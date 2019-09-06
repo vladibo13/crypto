@@ -4,4 +4,5 @@
 	height: 50vh;
 	background-position: center;
 	background-size: cover;
+	background-attachment: fixed;
 }
