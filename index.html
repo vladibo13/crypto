@@ -12,13 +12,38 @@
     <title>Crypto</title>
   </head>
   <body>
-    <h1 class="display-4 text-center">Crypto</h1>
+    <div class="container-fluid">
+        <div id="jumbotron" class="jumbotron">
+            <h1 class="display-4 text-center text-white">Crypto</h1>
+        </div>
+
+        <div class="row" id="main">
+
+        </div>
+    </div>
+
+
+    <div id="coin-card" style="display: none" class="col-3 my-3">
+        <div class="card">
+            <div class="card-body">
+              <h3 id="symbol"></h3>
+              <hr>
+              <h6 id="name"></h6>
+              <hr>
+              <button type="button" class="btn btn-outline-info btn-sm">More Info</button>
+              <!-- <a href="" class="btn btn-outline-info btn-sm" data-toggle="collapse">More Info</a>
+              <div class="collapse">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis odio, eos rerum nesciunt officia perferendis, veniam magnam adipisci porro fugiat explicabo dignissimos consectetur maiores cum ipsam, saepe laborum alias unde.</div> -->
+            </div>
+          </div>
+    </div>
+    
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="./js/jquery.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+    <script src="./js/model.js"></script>
     <script src="./js/service.js"></script>
     <script src="./js/index.js"></script>
 </body>
