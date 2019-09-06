@@ -12,5 +12,6 @@ class CoinInfo {
 		this.usdCoinPrice = usdCoinPrice;
 		this.eurCoinPrice = eurCoinPrice;
 		this.ilsCoinPrice = ilsCoinPrice;
+		this.showCoinInfo = false;
 	}
 }

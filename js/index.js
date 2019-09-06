@@ -14,7 +14,6 @@ function init() {
 		.then(() => {
 			draw();
 			// $('.collapse').collapse();
-			$('.collapse').collapse();
 		})
 		.catch((e) => console.log(e));
 }
@@ -27,35 +26,50 @@ function draw() {
 		documentCard.find('#name').html('Coin: ' + coin.name);
 		// native bootstrap button toggle, so far not working
 
-		// documentCard.find('.collapse').attr({ id: coin.id });
-		// documentCard.find('.btn-toggle').attr({ 'data-target': '#' + coin.id });
 		// documentCard.find('#btn-toggle').attr({ id: coin.id });
+		// documentCard.find('#btn-toggle').attr({ 'data-target': '#' + coin.id });
 
-		documentCard.find('#btn-toggle').on('click', function() {
-			api
-				.getBitCoinInfo(coin.id)
-				.then((coinInfo) => {
-					console.log(coinInfo);
-					const newCoinInfo = new CoinInfo(
-						coinInfo.image.large,
-						coinInfo.market_data.current_price.usd,
-						coinInfo.market_data.current_price.eur,
-						coinInfo.market_data.current_price.ils
-					);
-					stateInfo[coin.id] = newCoinInfo;
-					documentCard.find('img').addClass('img-fluid', 'my-3').attr({ src: stateInfo[coin.id].image });
-					documentCard.find('#usd').html(stateInfo[coin.id].usdCoinPrice + ' $');
-					documentCard.find('#eur').html(stateInfo[coin.id].eurCoinPrice + ' eur');
-					documentCard.find('#ils').html(stateInfo[coin.id].ilsCoinPrice + ' ils');
-				})
-				.catch((e) => console.log(e));
-		});
+		//add id to collapse so later i can access it via collapse bootstrap
+		documentCard.find('.collapse').attr({ id: coin.id });
 		$('#main').append(documentCard);
+		documentCard.find('#btn-toggle').on('click', function() {
+			//if coin does not exist in stateInfo call the api
+			if (!stateInfo[coin.id]) {
+				api
+					.getBitCoinInfo(coin.id)
+					.then((coinInfo) => {
+						console.log(coinInfo);
+						//create a new CoinInfo
+						const newCoinInfo = new CoinInfo(
+							coinInfo.image.large,
+							coinInfo.market_data.current_price.usd,
+							coinInfo.market_data.current_price.eur,
+							coinInfo.market_data.current_price.ils
+						);
+						//push to state info object with key:{object}
+
+						stateInfo[coin.id] = newCoinInfo;
+						stateInfo[coin.id].showCoinInfo = !stateInfo[coin.id].showCoinInfo;
+						documentCard.find('img').addClass('img-fluid', 'my-3').attr({ src: stateInfo[coin.id].image });
+						documentCard.find('#usd').html(stateInfo[coin.id].usdCoinPrice + ' $');
+						documentCard.find('#eur').html(stateInfo[coin.id].eurCoinPrice + ' eur');
+						documentCard.find('#ils').html(stateInfo[coin.id].ilsCoinPrice + ' ils');
+						$('#' + coin.id).collapse();
+					})
+					// .then(() => $('.collapse').collapse())
+					.catch((e) => console.log(e));
+			} else {
+				//if coin exist do not make api call
+				stateInfo[coin.id].showCoinInfo = !stateInfo[coin.id].showCoinInfo;
+
+				!stateInfo[coin.id].showCoinInfo
+					? $('#' + coin.id).collapse('hide')
+					: $('#' + coin.id).collapse('show');
+			}
+		});
 	});
 }
 
 $(function() {
 	init();
-
-	// $('.collapse').collapse();
 });
