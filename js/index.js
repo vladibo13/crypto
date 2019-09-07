@@ -1,7 +1,13 @@
+//storing coins from api
 state = [];
+//storing when user clicked on more info button to prevenet additional api calls
 stateInfo = {};
+//storing the data to display on the chart
+chartState = [];
 function init() {
 	//call to the api
+	//spinner for loading data
+	// $('#main').addClass('spinner-border', 'text-center');
 	api
 		.getBitCoins()
 		.then((coins) => {
@@ -12,6 +18,7 @@ function init() {
 			});
 		})
 		.then(() => {
+			// $('#main').removeClass('spinner-border', 'text-center');
 			draw();
 			// $('.collapse').collapse();
 		})
@@ -24,6 +31,12 @@ function draw() {
 		documentCard.css({ display: 'inline-block' });
 		documentCard.find('#symbol').html('Symbol: ' + coin.symbol);
 		documentCard.find('#name').html('Coin: ' + coin.name);
+		documentCard.find('#input-toggle').attr({
+			type: 'checkbox',
+			'data-toggle': 'toggle',
+			'data-onstyle': 'info',
+			'data-size': 'small'
+		});
 		// native bootstrap button toggle, so far not working
 
 		// documentCard.find('#btn-toggle').attr({ id: coin.id });
@@ -31,7 +44,29 @@ function draw() {
 
 		//add id to collapse so later i can access it via collapse bootstrap
 		documentCard.find('.collapse').attr({ id: coin.id });
+		//toggle switch
 		$('#main').append(documentCard);
+
+		documentCard.find('input[name=checkbox]').on('change', function() {
+			if ($(this).is(':checked')) {
+				// Checkbox is checked..
+
+				// bring the popup if chart state bigger than 5
+				if (chartState.length >= 5) {
+					$(this).prop('checked', false);
+					$('#myModal').modal('show');
+					$('#main-modal').append(drawModal());
+					return;
+				}
+				chartState.push(coin);
+			} else {
+				// Checkbox is not checked..
+				const chartToDelete = chartState.findIndex((chartCoin) => chartCoin.id === coin.id);
+				chartState.splice(chartToDelete, 1);
+			}
+		});
+
+		// more info button
 		documentCard.find('#btn-toggle').on('click', function() {
 			//if coin does not exist in stateInfo call the api
 			if (!stateInfo[coin.id]) {
@@ -67,6 +102,21 @@ function draw() {
 					: $('#' + coin.id).collapse('show');
 			}
 		});
+	});
+}
+
+function drawModal() {
+	return chartState.map((chart) => {
+		const documentModalCloned = $('#cloned-modal').clone();
+		documentModalCloned.css({ display: 'block' });
+		documentModalCloned.find('.switch').html(` 
+		<label>
+			${chart.symbol}
+			<input type="checkbox" name="checkbox">
+			<span class="lever"></span>
+		  </label>`);
+		documentModalCloned.find('input').prop('checked', true);
+		$('#main-modal').append(documentModalCloned);
 	});
 }
 
