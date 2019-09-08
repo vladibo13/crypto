@@ -3,6 +3,7 @@ class CoinList {
 		this.id = id;
 		this.symbol = symbol;
 		this.name = name;
+		this.selected = false;
 	}
 }
 

@@ -4,6 +4,7 @@ state = [];
 stateInfo = {};
 //storing the data to display on the chart
 chartState = [];
+
 function init() {
 	//call to the api
 	//spinner for loading data
@@ -26,31 +27,24 @@ function init() {
 }
 
 function draw() {
+	//clean ui if i draw again
+	$('#main').html('');
 	state.map((coin) => {
 		const documentCard = $('#coin-card').clone();
 		documentCard.css({ display: 'inline-block' });
 		documentCard.find('#symbol').html('Symbol: ' + coin.symbol);
 		documentCard.find('#name').html('Coin: ' + coin.name);
-		documentCard.find('#input-toggle').attr({
-			type: 'checkbox',
-			'data-toggle': 'toggle',
-			'data-onstyle': 'info',
-			'data-size': 'small'
-		});
-		// native bootstrap button toggle, so far not working
-
-		// documentCard.find('#btn-toggle').attr({ id: coin.id });
-		// documentCard.find('#btn-toggle').attr({ 'data-target': '#' + coin.id });
-
 		//add id to collapse so later i can access it via collapse bootstrap
 		documentCard.find('.collapse').attr({ id: coin.id });
-		//toggle switch
-		$('#main').append(documentCard);
+		//dynamicly set switch state
 
+		documentCard.find('input[name=checkbox]').prop('checked', coin.selected);
+		$('#main').append(documentCard);
+		//toggle switch
 		documentCard.find('input[name=checkbox]').on('change', function() {
 			if ($(this).is(':checked')) {
 				// Checkbox is checked..
-
+				coin.selected = true;
 				// bring the popup if chart state bigger than 5
 				if (chartState.length >= 5) {
 					$(this).prop('checked', false);
@@ -106,20 +100,48 @@ function draw() {
 }
 
 function drawModal() {
+	//clean ui if i draw again
+	$('#main-modal').html('');
 	return chartState.map((chart) => {
 		const documentModalCloned = $('#cloned-modal').clone();
-		documentModalCloned.css({ display: 'block' });
+		documentModalCloned.css({ display: 'inline-block' });
 		documentModalCloned.find('.switch').html(` 
 		<label>
-			${chart.symbol}
-			<input type="checkbox" name="checkbox">
+			${chart.symbol.toUpperCase()}
+			<input type="checkbox" name="modal-checkbox">
 			<span class="lever"></span>
 		  </label>`);
 		documentModalCloned.find('input').prop('checked', true);
+
 		$('#main-modal').append(documentModalCloned);
+		documentModalCloned.find('input[name=modal-checkbox]').on('change', function() {
+			if ($(this).is(':checked')) {
+				// Checkbox is checked..
+				alert('checked');
+				//find index in state to update selected toggle button
+				const stateIndexToUpdate = state.findIndex((stateCoin) => stateCoin.id === chart.id);
+				//update state toggle button
+				state[stateIndexToUpdate].selected = true;
+				// bring the popup if chart state bigger than 5
+				chartState.push(chart);
+			} else {
+				// Checkbox is not checked..
+				alert('unchecked');
+				//update the ui to false selected
+				const stateIndexToUpdate = state.findIndex((stateCoin) => stateCoin.id === chart.id);
+				state[stateIndexToUpdate].selected = false;
+				//delete from chartState
+				const chartToDelete = chartState.findIndex((chartCoin) => chartCoin.id === chart.id);
+				chartState.splice(chartToDelete, 1);
+			}
+		});
 	});
 }
 
 $(function() {
 	init();
+	//event when i close the modal
+	$('#myModal').on('hidden.bs.modal', function() {
+		draw();
+	});
 });
