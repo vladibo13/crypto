@@ -9,27 +9,28 @@ function init() {
 	//call to the api
 	//spinner for loading data
 	// $('#main').addClass('spinner-border', 'text-center');
+	$('.spinner-grow').removeClass('d-none');
 	api
 		.getBitCoins()
 		.then((coins) => {
 			console.log(coins.splice(1, 10));
-			coins.splice(1, 10).map((coin) => {
+			coins.splice(1, 30).map((coin) => {
 				const newCoin = new CoinList(coin.id, coin.symbol, coin.name);
 				state.push(newCoin);
 			});
 		})
 		.then(() => {
 			// $('#main').removeClass('spinner-border', 'text-center');
-			draw();
+			draw(state);
 			// $('.collapse').collapse();
 		})
 		.catch((e) => console.log(e));
 }
 
-function draw() {
+function draw(stateUI) {
 	//clean ui if i draw again
 	$('#main').html('');
-	state.map((coin) => {
+	stateUI.map((coin) => {
 		const documentCard = $('#coin-card').clone();
 		documentCard.css({ display: 'inline-block' });
 		documentCard.find('#symbol').html('Symbol: ' + coin.symbol);
@@ -47,6 +48,9 @@ function draw() {
 				coin.selected = true;
 				// bring the popup if chart state bigger than 5
 				if (chartState.length >= 5) {
+					//prevent from checking the six switch checkbox when draw again
+					coin.selected = false;
+					//prevent from checking the six switch checkbox when selecting
 					$(this).prop('checked', false);
 					$('#myModal').modal('show');
 					$('#main-modal').append(drawModal());
@@ -79,8 +83,8 @@ function draw() {
 
 						stateInfo[coin.id] = newCoinInfo;
 						stateInfo[coin.id].showCoinInfo = !stateInfo[coin.id].showCoinInfo;
-						documentCard.find('img').addClass('img-fluid', 'my-3').attr({ src: stateInfo[coin.id].image });
-						documentCard.find('#usd').html(stateInfo[coin.id].usdCoinPrice + ' $');
+						documentCard.find('img').addClass('img-fluid').attr({ src: stateInfo[coin.id].image });
+						documentCard.find('#usd').addClass('mt-3').html(stateInfo[coin.id].usdCoinPrice + 'usd');
 						documentCard.find('#eur').html(stateInfo[coin.id].eurCoinPrice + ' eur');
 						documentCard.find('#ils').html(stateInfo[coin.id].ilsCoinPrice + ' ils');
 						$('#' + coin.id).collapse();
@@ -104,13 +108,8 @@ function drawModal() {
 	$('#main-modal').html('');
 	return chartState.map((chart) => {
 		const documentModalCloned = $('#cloned-modal').clone();
-		documentModalCloned.css({ display: 'inline-block' });
-		documentModalCloned.find('.switch').html(` 
-		<label>
-			${chart.symbol.toUpperCase()}
-			<input type="checkbox" name="modal-checkbox">
-			<span class="lever"></span>
-		  </label>`);
+		documentModalCloned.css({ display: 'block' });
+		documentModalCloned.find('.switch').append(chart.symbol.toUpperCase());
 		documentModalCloned.find('input').prop('checked', true);
 
 		$('#main-modal').append(documentModalCloned);
@@ -142,6 +141,6 @@ $(function() {
 	init();
 	//event when i close the modal
 	$('#myModal').on('hidden.bs.modal', function() {
-		draw();
+		draw(state);
 	});
 });
