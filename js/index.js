@@ -1,27 +1,35 @@
 //storing coins from api
-state = [];
+// let state = [];
 //storing when user clicked on more info button to prevenet additional api calls
-stateInfo = {};
+// let state.infoState = {};
 //storing the data to display on the chart
-chartState = [];
+// let state.chartState = [];
+
+let state = {
+	appState: [],
+	infoState: {},
+	chartState: []
+};
 
 function init() {
 	//call to the api
 	//spinner for loading data
 	// $('#main').addClass('spinner-border', 'text-center');
-	$('.spinner-grow').removeClass('d-none');
+	$('#main').html('');
+	$('#spinner-container').removeClass('d-none');
 	api
 		.getBitCoins()
 		.then((coins) => {
 			console.log(coins.splice(1, 10));
-			coins.splice(1, 30).map((coin) => {
+			coins.splice(0, 50).map((coin) => {
 				const newCoin = new CoinList(coin.id, coin.symbol, coin.name);
-				state.push(newCoin);
+				state.appState.push(newCoin);
 			});
+			$('.spinner-border').addClass('d-none');
 		})
 		.then(() => {
 			// $('#main').removeClass('spinner-border', 'text-center');
-			draw(state);
+			draw(state.appState);
 			// $('.collapse').collapse();
 		})
 		.catch((e) => console.log(e));
@@ -29,6 +37,8 @@ function init() {
 
 function draw(stateUI) {
 	//clean ui if i draw again
+	$('#search-coins').removeClass('d-none');
+
 	$('#main').html('');
 	stateUI.map((coin) => {
 		const documentCard = $('#coin-card').clone();
@@ -47,7 +57,7 @@ function draw(stateUI) {
 				// Checkbox is checked..
 				coin.selected = true;
 				// bring the popup if chart state bigger than 5
-				if (chartState.length >= 5) {
+				if (state.chartState.length >= 5) {
 					//prevent from checking the six switch checkbox when draw again
 					coin.selected = false;
 					//prevent from checking the six switch checkbox when selecting
@@ -56,18 +66,18 @@ function draw(stateUI) {
 					$('#main-modal').append(drawModal());
 					return;
 				}
-				chartState.push(coin);
+				state.chartState.push(coin);
 			} else {
 				// Checkbox is not checked..
-				const chartToDelete = chartState.findIndex((chartCoin) => chartCoin.id === coin.id);
-				chartState.splice(chartToDelete, 1);
+				const chartToDelete = state.chartState.findIndex((chartCoin) => chartCoin.id === coin.id);
+				state.chartState.splice(chartToDelete, 1);
 			}
 		});
 
 		// more info button
 		documentCard.find('#btn-toggle').on('click', function() {
-			//if coin does not exist in stateInfo call the api
-			if (!stateInfo[coin.id]) {
+			//if coin does not exist in state.infoState call the api
+			if (!state.infoState[coin.id]) {
 				api
 					.getBitCoinInfo(coin.id)
 					.then((coinInfo) => {
@@ -81,21 +91,28 @@ function draw(stateUI) {
 						);
 						//push to state info object with key:{object}
 
-						stateInfo[coin.id] = newCoinInfo;
-						stateInfo[coin.id].showCoinInfo = !stateInfo[coin.id].showCoinInfo;
-						documentCard.find('img').addClass('img-fluid').attr({ src: stateInfo[coin.id].image });
-						documentCard.find('#usd').addClass('mt-3').html(stateInfo[coin.id].usdCoinPrice + 'usd');
-						documentCard.find('#eur').html(stateInfo[coin.id].eurCoinPrice + ' eur');
-						documentCard.find('#ils').html(stateInfo[coin.id].ilsCoinPrice + ' ils');
+						state.infoState[coin.id] = newCoinInfo;
+						state.infoState[coin.id].showCoinInfo = !state.infoState[coin.id].showCoinInfo;
+						documentCard.find('img').addClass('img-fluid').attr({ src: state.infoState[coin.id].image });
+						documentCard
+							.find('#usd')
+							.addClass('mt-3')
+							.html(state.infoState[coin.id].usdCoinPrice + ' <i class="fas fa-dollar-sign"></i>');
+						documentCard
+							.find('#eur')
+							.html(state.infoState[coin.id].eurCoinPrice + ' <i class="fas fa-euro-sign"></i>');
+						documentCard
+							.find('#ils')
+							.html(state.infoState[coin.id].ilsCoinPrice + ' <i class="fas fa-shekel-sign"></i>');
 						$('#' + coin.id).collapse();
 					})
 					// .then(() => $('.collapse').collapse())
 					.catch((e) => console.log(e));
 			} else {
 				//if coin exist do not make api call
-				stateInfo[coin.id].showCoinInfo = !stateInfo[coin.id].showCoinInfo;
+				state.infoState[coin.id].showCoinInfo = !state.infoState[coin.id].showCoinInfo;
 
-				!stateInfo[coin.id].showCoinInfo
+				!state.infoState[coin.id].showCoinInfo
 					? $('#' + coin.id).collapse('hide')
 					: $('#' + coin.id).collapse('show');
 			}
@@ -106,7 +123,7 @@ function draw(stateUI) {
 function drawModal() {
 	//clean ui if i draw again
 	$('#main-modal').html('');
-	return chartState.map((chart) => {
+	return state.chartState.map((chart) => {
 		const documentModalCloned = $('#cloned-modal').clone();
 		documentModalCloned.css({ display: 'block' });
 		documentModalCloned.find('.switch').append(chart.symbol.toUpperCase());
@@ -118,29 +135,143 @@ function drawModal() {
 				// Checkbox is checked..
 				alert('checked');
 				//find index in state to update selected toggle button
-				const stateIndexToUpdate = state.findIndex((stateCoin) => stateCoin.id === chart.id);
+				const stateIndexToUpdate = state.appState.findIndex((stateCoin) => stateCoin.id === chart.id);
 				//update state toggle button
-				state[stateIndexToUpdate].selected = true;
+				state.appState[stateIndexToUpdate].selected = true;
 				// bring the popup if chart state bigger than 5
-				chartState.push(chart);
+				state.appState.chartState.push(chart);
 			} else {
 				// Checkbox is not checked..
 				alert('unchecked');
 				//update the ui to false selected
-				const stateIndexToUpdate = state.findIndex((stateCoin) => stateCoin.id === chart.id);
-				state[stateIndexToUpdate].selected = false;
-				//delete from chartState
-				const chartToDelete = chartState.findIndex((chartCoin) => chartCoin.id === chart.id);
-				chartState.splice(chartToDelete, 1);
+				const stateIndexToUpdate = state.appState.findIndex((stateCoin) => stateCoin.id === chart.id);
+				state.appState[stateIndexToUpdate].selected = false;
+				//delete from state.chartState
+				const chartToDelete = state.chartState.findIndex((chartCoin) => chartCoin.id === chart.id);
+				state.chartState.splice(chartToDelete, 1);
 			}
 		});
 	});
+}
+
+function searchAction(state) {
+	console.log('search = ' + state);
+	const searchTerm = $('#search-input').val();
+	const result = state.filter((coin) => coin.symbol.includes(searchTerm));
+	return result;
+}
+
+function initAbout() {
+	$('#search-coins').addClass('d-none');
+	const aboutDocument = $('#about').clone();
+	aboutDocument.removeClass('d-none');
+	$('#main').html(aboutDocument);
+}
+
+function createChart() {
+	// const promises = state.chartState.map((chart) => api.getSingleCoin(chart.symbol.toUpperCase()));
+	// Promise.all(promises).then((res) => console.log(res));
+	if (state.chartState.length < 4) {
+		$('#main').html('Need To Select at least 5 coins');
+		return;
+	}
+	state.chartState.map((chart) => api.getSingleCoin(chart.symbol.toUpperCase()));
+	api
+		.getMultiCoins(
+			state.chartState[0].symbol.toUpperCase(),
+			state.chartState[1].symbol.toUpperCase(),
+			state.chartState[2].symbol.toUpperCase(),
+			state.chartState[3].symbol.toUpperCase(),
+			state.chartState[4].symbol.toUpperCase()
+		)
+		.then((res) => {
+			console.log('res = ' + res);
+			const chartNames = Object.keys(res).filter((key) => key).map((key) => {
+				return { label: key, y: res[key].USD };
+			});
+			const chartLength = chartNames.length;
+			console.log(chartNames);
+			var options = {
+				title: {
+					text: 'Number of Active Users in Website'
+				},
+
+				data: [
+					{
+						type: 'column',
+						yValueFormatString: '#,###',
+						indexLabel: '{y}',
+						color: '#546BC1',
+						// dataPoints: [ getChartObject(chartNames) ]
+						// dataPoints: [ chartNames[0], chartNames[1], chartNames[2], chartNames[3], chartNames[4] ]
+						dataPoints: [ chartNames.map((chartObj) => chartObj) + ',' ]
+					}
+				]
+			};
+			$('#chartContainer').CanvasJSChart(options);
+		})
+		.catch((e) => $('#main').html('NO COINS FOUND'));
+	// 	BTC: {USD: 10350.75}
+	// ETH: {USD: 194.03}
+}
+
+function getChartObject(charts) {
+	return charts.map((c) => c);
+}
+
+function initChart() {
+	$('#search-coins').addClass('d-none');
+	$('#main').html('<div id="chartContainer" class="w-100"></div>');
+	createChart();
+}
+
+function clearMainDOM() {
+	$('#main').html('');
+}
+
+function initInfoState() {
+	state.infoState = {};
+}
+
+function getMultiCoinsBySymbol() {
+	const promise = api.getMultiCoins(
+		state.chartState[0].symbol.toUpperCase(),
+		state.chartState[1].symbol.toUpperCase(),
+		state.chartState[2].symbol.toUpperCase(),
+		state.chartState[3].symbol.toUpperCase(),
+		state.chartState[4].symbol.toUpperCase()
+	);
+	promise.then((p) => console.log(p));
 }
 
 $(function() {
 	init();
 	//event when i close the modal
 	$('#myModal').on('hidden.bs.modal', function() {
-		draw(state);
+		draw(state.appState);
+	});
+
+	$('#search-btn').on('click', function() {
+		const result = searchAction(state.appState);
+		$('#search-input').val('');
+		result.length === 0 ? draw(state.appState) : draw(result);
+	});
+
+	$('#home-tab').on('click', function() {
+		$('#search-coins').removeClass('d-none');
+		clearMainDOM();
+		init();
+	});
+
+	$('#about-tab').on('click', function() {
+		clearMainDOM();
+		initInfoState();
+		initAbout();
+	});
+
+	$('#chart-tab').on('click', function() {
+		clearMainDOM();
+		initInfoState();
+		initChart();
 	});
 });

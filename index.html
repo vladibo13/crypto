@@ -8,7 +8,8 @@
     <!-- Bootstrap CSS -->
   
    <link rel="stylesheet" href="./css/bootstrap.min.css">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/fontawesome.min.css">
+   <link rel="stylesheet" href="./css/materialize.switch.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css">
    <link rel="stylesheet" href="./css/index.css">
 
     <title>Crypto</title>
@@ -19,11 +20,30 @@
             <h1 class="display-4 text-center text-white">Crypto</h1>
         
         </div>
-       
+        <nav>
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="text-info nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="text-info nav-link" id="chart-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Live Reports</a>
+            </li>
+            <li class="nav-item">
+              <a class="text-info nav-link" id="about-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">About</a>
+            </li>
+          </ul>
+        </nav>
+        <div id="search-coins" class="input-group mt-3 mb-3 w-75 mx-auto d-none">
+          <input id="search-input" type="text" class="form-control" placeholder="Search Coins By Symbol" aria-label="Recipient's username" aria-describedby="button-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-outline-info" type="button" id="search-btn">Search Coins</button>
+          </div>
+        </div>
         <div class="row" id="main">
 
         </div>
     </div>
+   
     <!-- <input id="input-toggle" type="checkbox"  data-toggle="toggle" data-onstyle="info" data-size="small"> -->
     <div id="coin-card" style="display: none" class="col-sm-6 col-md-4 col-lg-3 my-3 ">
         <div class="card shadow rounded">
@@ -46,7 +66,7 @@
               <!-- <a  class="btn btn-outline-info btn-sm mb-3 btn-toggle" data-toggle="collapse">More Info</a> -->
               <div id="1" class="collapse ">
                 <img  alt="">
-                <p id="usd">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Velit cumque corrupti at recusandae temporibus vero nihil reiciendis animi ipsam tenetur repellat minus laboriosam voluptatibus adipisci, fuga atque dignissimos numquam accusamus!</p>
+                <p id="usd"></p>
                 <p id="eur"></p>
                 <p id="ils"></p>
               </div>
@@ -88,24 +108,50 @@
         <hr>  
 </div>
 <!-- spinner -->
-<div class="d-none d-flex justify-content-center mt-5">
-  <div class="spinner-grow " style="width: 15rem; height: 15rem;" role="status">
+<div id="spinner-container" class="d-none d-flex justify-content-center mt-5">
+  <div class="spinner-border " style="width: 15rem; height: 15rem;" role="status">
     <span class="sr-only">Loading...</span>
   </div>
 </div>
 
+<!-- https://images.unsplash.com/photo-1504593811423-6dd665756598?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80 -->
+<!-- ABOUT PAGE -->
+    <div id="about" class="container d-none mt-5">
+    <div  class="col-12">
+      <div class="card shadow" >
+        <img id="image-portfolio" src="./images/vladi-3.jpg" class="card-img-top img-fluid" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Vladimir Bozhkov</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Web Developer</h6>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="card-link text-info"><i class="fab fa-github fa-2x"></i></a>
+           
+        </div>
+      </div>
+      <!-- end col -->
+    </div> 
+  </div>
+ 
+
+  <!-- <div id="chartContainer d-none" class="w-100" ></div> -->
 
     
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="./js/jquery.js"></script>
-   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+   
+
+
+<script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+
+   
     <script src="./js/model.js"></script>
     <script src="./js/service.js"></script>
     <script src="./js/index.js"></script>
+    <script src="./js/chart.js"></script>
     
 </body>
 </html>
