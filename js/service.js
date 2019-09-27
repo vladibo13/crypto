@@ -13,6 +13,16 @@ const api = {
 			method: 'get'
 		});
 	},
+	getMultiCoinsWithArguments: (...coins) => {
+		let urlBuild = 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=';
+		coins.map((coin) => (urlBuild += `${coin},`));
+		urlBuild += '&tsyms=USD,EUR';
+		console.log(urlBuild);
+		// return $.ajax({
+		// 	url: `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${coin1},${coin2},${coin3},${coin4},${coin5}&tsyms=USD,EUR‬‬`,
+		// 	method: 'get'
+		// });
+	},
 	getMultiCoins: (coin1, coin2, coin3, coin4, coin5) => {
 		return $.ajax({
 			url: `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${coin1},${coin2},${coin3},${coin4},${coin5}&tsyms=USD,EUR‬‬`,

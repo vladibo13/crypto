@@ -17,7 +17,7 @@
   <body>
     <div class="container-fluid">
         <div id="jumbotron" class="jumbotron">
-            <h1 class="display-4 text-center text-white">Crypto</h1>
+            <h1 class="display-3 text-center text-white">Crypto</h1>
         
         </div>
         <nav>
@@ -26,11 +26,15 @@
               <a class="text-info nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
             </li>
             <li class="nav-item">
-              <a class="text-info nav-link" id="chart-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Live Reports</a>
+              <a class="text-info nav-link" id="favorites-tab" data-toggle="tab" href="#favorites" role="tab" aria-controls="contact" aria-selected="false">Favorites</a>
             </li>
             <li class="nav-item">
               <a class="text-info nav-link" id="about-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">About</a>
             </li>
+            <li class="nav-item">
+              <a class="text-info nav-link" id="chart-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Live Reports</a>
+            </li>
+           
           </ul>
         </nav>
         <div id="search-coins" class="input-group mt-3 mb-3 w-75 mx-auto d-none">
@@ -100,6 +104,7 @@
    <div class="switch">
         
           <label>
+            <h5 class="modal-symbol"></h5>
             <input type="checkbox" name="modal-checkbox">
             <span class="lever"></span>
           </label>
@@ -131,6 +136,38 @@
       <!-- end col -->
     </div> 
   </div>
+
+<!-- Table -->
+  <table id="table" class="table d-none">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">First</th>
+        <th scope="col">Last</th>
+        <th scope="col">Handle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td>Larry</td>
+        <td>the Bird</td>
+        <td>@twitter</td>
+      </tr>
+    </tbody>
+  </table>
  
 
   <!-- <div id="chartContainer d-none" class="w-100" ></div> -->
